@@ -22,6 +22,7 @@ function createFloatingBubble() {
     skipTaskbar: true,
     resizable: false,
     transparent: true,
+    hasShadow: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -30,9 +31,6 @@ function createFloatingBubble() {
   });
 
   floatingBubble.loadFile('bubble.html');
-  
-  // Make the bubble draggable
-  floatingBubble.setIgnoreMouseEvents(false);
   
   // Handle bubble click
   floatingBubble.on('closed', () => {
@@ -165,10 +163,24 @@ ipcMain.handle('close-chat', () => {
 
 ipcMain.handle('capture-screen', async () => {
   try {
+    // Hide the chat window temporarily to capture clean screen
+    let wasVisible = false;
+    if (chatWindow && chatWindow.isVisible()) {
+      wasVisible = true;
+      chatWindow.hide();
+      // Wait a bit for the window to be fully hidden
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
     const sources = await desktopCapturer.getSources({
       types: ['screen'],
       thumbnailSize: { width: 1920, height: 1080 }
     });
+    
+    // Restore chat window if it was visible
+    if (wasVisible && chatWindow && !chatWindow.isDestroyed()) {
+      chatWindow.show();
+    }
     
     if (sources.length > 0) {
       // Return the thumbnail as base64 data URL
@@ -178,6 +190,12 @@ ipcMain.handle('capture-screen', async () => {
     throw new Error('No screen sources available');
   } catch (error) {
     console.error('Screen capture error:', error);
+    
+    // Make sure to restore chat window even if there's an error
+    if (chatWindow && !chatWindow.isDestroyed()) {
+      chatWindow.show();
+    }
+    
     throw error;
   }
 });
