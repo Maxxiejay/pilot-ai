@@ -8,20 +8,38 @@ class GeminiAPI {
         if (!this.apiKey) {
             console.warn('Gemini API key not found. Please set GEMINI_API_KEY in your .env file');
         }
-    }
-    
-    async generateResponse(prompt, imageData) {
+    }    async generateResponse(prompt, imageData) {
         if (!this.apiKey) {
             throw new Error('Gemini API key not configured');
         }
         
         try {
-            // Prepare the request payload
+            // System prompt that defines the AI's role and behavior
+            const systemPrompt = `You are Pilot AI, a helpful desktop assistant that can see and analyze the user's screen. Your role is to:
+
+- Provide context-aware help based on what you can see on the user's screen
+- Offer specific, actionable advice and solutions
+- Help with software issues, UI navigation, coding problems, or any task visible on screen
+- Be concise but thorough in your explanations
+- Always reference what you can see in the screenshot when relevant
+- Maintain a friendly, professional tone
+
+When analyzing the screen, pay attention to:
+- Application windows and their content
+- Error messages or dialog boxes
+- Code editors and their content
+- Browser pages and their content
+- System interfaces and settings
+- Any visual elements that might be relevant to the user's question
+
+User's question: ${prompt}`;
+
+            // Prepare the request payload with combined system and user message
             const payload = {
                 contents: [{
                     parts: [
                         {
-                            text: `You are a helpful AI assistant that can see the user's screen. The user is asking: "${prompt}". Please provide a helpful response based on what you can see in the image and the user's question. Be concise but informative.`
+                            text: systemPrompt
                         }
                     ]
                 }],
@@ -33,7 +51,7 @@ class GeminiAPI {
                 }
             };
             
-            // Add image if provided
+            // Add image to the message if provided
             if (imageData) {
                 // Convert data URL to base64
                 const base64Data = imageData.split(',')[1];

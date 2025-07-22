@@ -42,7 +42,12 @@ function createFloatingBubble() {
 
 function createChatWindow() {
   if (chatWindow) {
-    chatWindow.focus();
+    if (chatWindow.isVisible()) {
+      chatWindow.focus();
+    } else {
+      chatWindow.show();
+      chatWindow.focus();
+    }
     return;
   }
 
