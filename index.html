@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilot AI Assistant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="chat-window">
+    <div class="chat-container">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="header-content">
+                <div class="ai-avatar">🤖</div>
+                <h3>Pilot AI</h3>
+            </div>
+            <div class="header-controls">
+                <button id="minimizeBtn" class="control-btn" title="Minimize">−</button>
+                <button id="closeBtn" class="control-btn close" title="Close">×</button>
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                <div class="message-content">
+                    <p>Hello! I'm your AI assistant. I can see what's on your screen and help you with any questions or tasks. What can I help you with today?</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="chat-input-container">
+            <div class="input-wrapper">
+                <textarea 
+                    id="messageInput" 
+                    placeholder="Ask me anything about what you're seeing..." 
+                    rows="2"
+                ></textarea>
+                <button id="sendBtn" class="send-btn" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="input-footer">
+                <span class="screen-capture-indicator" id="screenIndicator">
+                    📷 Screen capture enabled
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Analyzing screen and generating response...</p>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
