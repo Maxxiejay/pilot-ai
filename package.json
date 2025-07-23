@@ -2,9 +2,15 @@
   "name": "pilot-ai-assistant",
   "version": "1.0.0",
   "description": "System-wide context-aware AI assistant with screen capture and Gemini integration",
-  "main": "main.js",  "scripts": {
+  "main": "main.js",
+  "scripts": {
     "start": "electron .",
-    "dev": "electron ."
+    "dev": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "dist": "electron-builder --publish=never"
   },
   "keywords": [
     "electron",
@@ -13,9 +19,45 @@
     "gemini",
     "screen-capture"
   ],
-  "author": "Your Name",  "license": "MIT",
+  "author": "Your Name",
+  "license": "MIT",  "build": {
+    "appId": "com.yourname.pilot-ai",
+    "productName": "Pilot AI Assistant",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!node_modules/**/*",
+      "node_modules/axios/**/*",
+      "node_modules/dotenv/**/*"
+    ],    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/icon.png"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.png"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"    },
+    "portable": {
+      "requestExecutionLevel": "user"
+    }
+  },
   "devDependencies": {
-    "electron": "^37.2.3"
+    "electron": "^37.2.3",
+    "electron-builder": "^26.0.12"
   },
   "dependencies": {
     "axios": "^1.10.0",
